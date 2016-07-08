@@ -1,8 +1,8 @@
 Package.describe({
   name: 'redaty:admin-lte',
-  version: '0.0.1',
+  version: '0.0.4',
   summary: 'AdminLTE dashboard theme',
-  git: 'https://github.com/meteor-factory/meteor-admin-lte.git',
+  git: '',
   documentation: 'README.md'
 });
 

@@ -7,6 +7,7 @@ var screenSizes = {
 
 Template.AdminLTE.onCreated(function () {
   var self = this;
+  this.my_skin = new ReactiveVar('blue');
   var skin = 'blue';
   var fixed = false;
   var sidebarMini = false;
@@ -42,6 +43,10 @@ Template.AdminLTE.onDestroyed(function () {
 });
 
 Template.AdminLTE.helpers({
+	my_skin: function() {
+    //access reactiveVar template variable from onCreated() hook
+    return Template.instance().my_skin.get();
+  },
   isReady: function () {
     return Template.instance().isReady.get();
   },
@@ -58,12 +63,102 @@ Template.AdminLTE.helpers({
 Template.AdminLTE.events({
 	'click [data-toggle=control-sidebar]': function (e, t) {
 		e.preventDefault();
+		
 		if($("aside.control-sidebar").hasClass("control-sidebar-open"))
 		{
 			$("aside.control-sidebar").removeClass("control-sidebar-open");
 		}else {
 			$("aside.control-sidebar").addClass("control-sidebar-open");
 		}
+	},
+	'click [data-layout=fixed]': function (e, t) {
+		e.preventDefault();
+			$("a[data-layout=fixed]").text("On");
+			$("a[data-layout=layout-boxed]").text("OFF");
+		/*if(document.getElementById("boxed_lay").checked){
+			//document.getElementById("fixed_lay").checked = true;
+			document.getElementById("boxed_lay").removeAttribute('checked');
+			
+		}*/
+		$('body').addClass('fixed')
+			$('body').removeClass('layout-boxed');
+			$('.control-sidebar').addClass('fixed');
+		
+		
+	},
+	'click [data-layout=layout-boxed]': function (e, t) {
+		e.preventDefault();
+		$("a[data-layout=layout-boxed]").text("On");
+		$("a[data-layout=fixed]").text("Off");
+		/*if(document.getElementById("fixed_lay").checked){
+			//document.getElementById("boxed_lay").checked = true;
+			document.getElementById("fixed_lay").removeAttribute('checked');
+			
+		}*/
+		$('body').removeClass('fixed')
+			$('body').addClass('layout-boxed');
+			$('.control-sidebar').removeClass('fixed');
+		
+	},
+	'click [data-skin=skin-black]': function (e, t) {
+		e.preventDefault();
+		skinChange('black',"dark");
+		
+	},
+	'click [data-skin=skin-blue]': function (e, t) {
+		e.preventDefault();
+		skinChange('blue',"dark");
+		
+	},
+	'click [data-skin=skin-purple]': function (e, t) {
+		e.preventDefault();
+		skinChange('purple',"dark");
+		
+	},
+	'click [data-skin=skin-green]': function (e, t) {
+		e.preventDefault();
+		skinChange('green',"dark");
+		
+	},
+	'click [data-skin=skin-red]': function (e, t) {
+		e.preventDefault();
+		skinChange('red',"dark");
+		
+	},
+	'click [data-skin=skin-yellow]': function (e, t) {
+		e.preventDefault();
+		skinChange('yellow',"dark");
+		
+	},
+	'click [data-skin=skin-blue-light]': function (e, t) {
+		e.preventDefault();
+		skinChange('blue-light',"light");
+		
+	},
+	'click [data-skin=skin-black-light]': function (e, t) {
+		e.preventDefault();
+		skinChange('black-light',"light");
+		
+	},
+	'click [data-skin=skin-purple-light]': function (e, t) {
+		e.preventDefault();
+		skinChange('purple-light',"light");
+		
+	},
+	'click [data-skin=skin-green-light]': function (e, t) {
+		e.preventDefault();
+		skinChange('green-light',"light");
+		
+	},
+	'click [data-skin=skin-red-light]': function (e, t) {
+		e.preventDefault();
+		skinChange('red-light',"light");
+		
+	},
+	'click [data-skin=skin-yellow-light]': function (e, t) {
+		e.preventDefault();
+		skinChange('yellow-light',"light");
+		
 	},
   'click [data-toggle=offcanvas]': function (e, t) {
     e.preventDefault();
@@ -128,6 +223,32 @@ Template.AdminLTE.events({
     }
   }
 });
+
+
+function skinChange(newSkin,light){
+	var get = Template.instance().my_skin.get();
+	$(".skin-"+get).addClass("skin-"+newSkin);
+	if(light = "light")
+	{
+		if($("aside.control-sidebar").hasClass("control-sidebar-dark"))
+		{
+			$("aside.control-sidebar").removeClass("control-sidebar-dark");
+			$("aside.control-sidebar").addClass("control-sidebar-light");
+		}
+	}
+	else {
+		if($("aside.control-sidebar").hasClass("control-sidebar-light"))
+		{
+			$("aside.control-sidebar").removeClass("control-sidebar-light");
+			$("aside.control-sidebar").addClass("control-sidebar-dark");
+		}
+	}
+	$(".skin-"+get).removeClass(".skin-"+get);
+	//$("body").addClass(newSkin);
+	$('link[href="' + Meteor.absoluteUrl('packages/redaty_admin-lte/css/skins/skin-' + get + '.min.css') + '"]').remove();
+	Template.instance().my_skin.set(newSkin);
+	waitOnCSS(skinUrl(newSkin));
+}
 
 function cssUrl () {
   return Meteor.absoluteUrl('packages/redaty_admin-lte/css/AdminLTE.min.css');
